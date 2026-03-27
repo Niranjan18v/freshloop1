@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+
 /// Fetches product details using multiple API providers for robustness.
 class ProductApi {
   // ── API Configuration ──────────────────────────────────────────────────────
@@ -42,7 +43,8 @@ class ProductApi {
     // 3. Ultimate Fallback
     return {
       "name": "Product Not Found",
-      "price": "N/A"
+      "price": "N/A",
+      "image": ""
     };
   }
 
@@ -64,13 +66,16 @@ class ProductApi {
       final int status = body['status'] ?? 0;
       
       if (status == 1 && body['product'] != null) {
-        final String name = (body['product']['product_name'] as String?)?.trim() ?? '';
+        final product = body['product'];
+        final String name = (product['product_name'] as String?)?.trim() ?? '';
+        final String image = (product['image_front_url'] as String?)?.trim() ?? '';
+        
         if (name.isNotEmpty) {
-          return {'name': name, 'price': 'N/A'};
+          return {'name': name, 'price': 'N/A', 'image': image};
         }
       }
       
-      return {'name': 'Product not found', 'price': 'N/A'};
+      return {'name': 'Product not found', 'price': 'N/A', 'image': ''};
     } catch (e) {
       return {'name': 'Error: OFF API Fail', 'price': 'N/A'};
     }
@@ -109,7 +114,7 @@ class ProductApi {
         }
       }
 
-      return {'name': 'Product Not Found', 'price': 'N/A'};
+      return {'name': 'Product Not Found', 'price': 'N/A', 'image': ''};
     } catch (e) {
       return {'name': 'Error: FoodRepo API Fail', 'price': 'N/A'};
     }

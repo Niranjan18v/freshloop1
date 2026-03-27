@@ -6,17 +6,20 @@ import '../../services/product_api.dart';
 /// [name]    – product name, or an error description when [found] is false.
 /// [price]   – price string (always "N/A" from OpenFoodFacts).
 /// [barcode] – the raw barcode that was scanned.
+/// [image]   – product image URL from Open Food Facts, or empty string.
 class ScanResult {
   final bool found;
   final String name;
   final String price;
   final String barcode;
+  final String image;
 
   const ScanResult({
     required this.found,
     required this.name,
     required this.price,
     required this.barcode,
+    this.image = '',
   });
 }
 
@@ -36,6 +39,7 @@ class ScanController {
 
     final String name = data['name'] ?? 'Unknown Product';
     final String price = data['price'] ?? 'N/A';
+    final String image = data['image'] ?? '';
 
     // Treat API-level "not found" sentinels and error strings as not found
     final bool found =
@@ -46,6 +50,7 @@ class ScanController {
       name: name,
       price: price,
       barcode: barcode,
+      image: image,
     );
   }
 }
